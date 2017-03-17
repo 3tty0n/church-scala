@@ -1,3 +1,3 @@
 # church-scala
 
-A implementation of church encoding by Scala.
+An implementation of church encoding by Scala.
