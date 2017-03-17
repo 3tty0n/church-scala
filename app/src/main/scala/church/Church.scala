@@ -35,11 +35,11 @@ object Church {
 
   def zero[A]: Num[A] = s => z => z
 
-  def succ[A]: Num[A] => Num[A] = n => s => z => s(n(s)(z))
+  def succ[A](n: Num[A]): Num[A] = s => z => s(n(s)(z))
 
   def plus[A]: (Num[A]) => (Num[A]) => Num[A] = m => n => s => z => m(s)(n(s)(z))
 
-  def times[A]: (Num[A]) => (Num[A]) => Num[A] = m => n => m compose n
+  def times[A](m: Num[A])(n: Num[A]): Num[A] = m compose n
 
   implicit class Num2Int(val num: Num[Int]) {
     def toInt: Int = num(_ + 1)(0)
