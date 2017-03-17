@@ -9,5 +9,9 @@ lazy val root = (project in file(".")).
 
 lazy val app = (project in file("app")).
   settings(
-    name := "church-scala"
+    name := "church-scala",
+    libraryDependencies ++= Seq(
+      "org.scalatest" %% "scalatest" % "3.0.1" % "test",
+      "org.scalaz" %% "scalaz-core" % "7.2.10"
+    )
   )
