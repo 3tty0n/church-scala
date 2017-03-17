@@ -23,4 +23,10 @@ class ChurchSpec extends FlatSpec {
     assert(times[Int](succ(succ(zero)))(succ(zero)).toInt === 2)
     assert(plus[Int](succ(succ(succ(zero))))(succ(succ(zero))).toInt === 5)
   }
+
+  "Church List" should "behave properly" in {
+    val xs = cons(1)(cons(2)(cons(3)(nil)))
+    assert(xs(x => y => x + y)(0) === 6)
+    assert(head(xs) === 1)
+  }
 }

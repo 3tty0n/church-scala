@@ -56,4 +56,15 @@ object Church {
     }
   }
 
+  // @see http://stackoverflow.com/questions/2602276/closures-and-universal-quantification
+  type CList[T, U] = (T => U => U) => U => U
+
+  def nil[A, B >: A]: CList[A, B] = c => n => n
+
+  def cons[A, B >: A](x: A)(xs: CList[A, B]): CList[A, B] = f => b => f(x)(xs(f)(b))
+
+  def head[A, B >: A](l: CList[A, B]): B = l(h => t => h)(nil.asInstanceOf[B])
+
+  def tail[A, B >: A](l: CList[A, B]): CList[A, B] = ???
+
 }
