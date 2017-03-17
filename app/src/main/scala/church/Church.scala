@@ -1,6 +1,6 @@
 package church
 
-object Church extends App {
+object Church {
   type Bool[T] = T => T => T
 
   def tru[A]: Bool[A] = t => f => t
@@ -23,8 +23,6 @@ object Church extends App {
     def toBool: Bool[Boolean] = if (b) tru else fls
   }
 
-  assert(!and[Boolean](true.toBool)(false.toBool).toBoolean)
-
   type Pair[T] = (T => T => T) => T
 
   def pair[A]: A => A => Pair[A] = f => s => b => b(f)(s)
@@ -32,12 +30,6 @@ object Church extends App {
   def fst[A]: (Pair[A]) => A = p => p(tru)
 
   def snd[A]: (Pair[A]) => A = p => p(fls)
-
-  val p1 = pair[Bool[Boolean]](tru)(fls)
-
-  val p2 = pair[Bool[Boolean]](tru)(fls)
-
-  assert(fst[Bool[Boolean]](p1).toBoolean)
 
   type Num[T] = (T => T) => T => T
 
@@ -55,16 +47,13 @@ object Church extends App {
 
   implicit class Int2Num(val n: Int) {
     def toNum: Num[Int] = {
-      def aux(n: Int): Num[Int] = n match {
-        case 0 => zero
-        case x => succ[Int](aux(x - 1))
-      }
-      aux(n)
+      def f(n: Int): Num[Int] = g => x =>
+        n match {
+          case 0 => x
+          case _ => g(f(n - 1)(g)(x))
+        }
+      f(n)
     }
   }
-
-  assert(times[Int](succ[Int](succ[Int](zero)))(succ[Int](succ[Int](zero))).toInt == 4)
-
-  assert(times[Int](3.toNum)(4.toNum).toInt == 12)
 
 }
